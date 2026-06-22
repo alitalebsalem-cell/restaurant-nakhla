@@ -256,7 +256,7 @@ renderCart();
 
 }
 
-async function sendWhatsApp(){
+function sendWhatsApp(){
 
 let name =
 document.getElementById(
@@ -266,24 +266,20 @@ document.getElementById(
 if(name===""){
 
 alert("اكتب اسم العميل");
+
 return;
 
 }
 
-let orderText = "";
-let total = 0;
+localStorage.setItem(
+"customerName",
+name
+);
 
-cart.forEach(item=>{
+window.location.href =
+"invoice.html";
 
-total += item.price * item.qty;
-
-orderText +=
-item.name +
-" × " +
-item.qty +
-"\n";
-
-});
+}
 
 const data = {
 
