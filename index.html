@@ -14,78 +14,159 @@
 
 <body>
 
-<header>
+<!-- Header -->
 
-<button class="menu-btn">☰</button>
+<header class="header">
 
-<div class="brand">
-<h1>مطاعم ومطابخ النخلة</h1>
-<p>أشهى المأكولات اليمنية</p>
+<button class="icon-btn">
+☰
+</button>
+
+<div class="header-center">
+<div class="header-title">
+مطاعم ومطابخ النخلة
 </div>
 
-<a href="cart.html" class="cart-btn">
-🛒
+<div class="header-sub">
+أشهى المأكولات اليمنية
+</div>
+</div>
+
+<a href="cart.html" style="text-decoration:none;position:relative">
+
+<span style="font-size:30px">🛒</span>
+
+<span id="cartCount" class="cart-count">
+0
+</span>
+
 </a>
 
 </header>
 
+<!-- Hero -->
+
 <section class="hero">
 
-<img src="images/logo.png" class="hero-logo">
+<img
+src="images/logo.png"
+class="hero-logo"
+>
 
-<h2>مرحباً بكم في مطاعم النخلة</h2>
+<div class="hero-title">
+مرحباً بكم
+</div>
 
-<p>
+<div class="hero-desc">
 اطلب وجبتك المفضلة بسهولة
-</p>
+</div>
 
 </section>
 
 <a
-class="whatsapp-btn"
+class="whatsapp"
 href="https://wa.me/967730244894"
 target="_blank">
 📱 اطلب عبر واتساب
 </a>
 
+<!-- Categories -->
+
 <div class="categories">
 
-<button>🍽️ وجبات رئيسية</button>
-<button>🔥 مشويات</button>
-<button>🥗 مقبلات</button>
-<button>🍕 بيتزا</button>
-<button>🥤 مشروبات</button>
+<button
+class="cat-btn active"
+onclick="filterProducts('all',this)">
+الكل
+</button>
+
+<button
+class="cat-btn"
+onclick="filterProducts('وجبات رئيسية',this)">
+وجبات رئيسية
+</button>
+
+<button
+class="cat-btn"
+onclick="filterProducts('مشويات',this)">
+مشويات
+</button>
+
+<button
+class="cat-btn"
+onclick="filterProducts('مقبلات',this)">
+مقبلات
+</button>
+
+<button
+class="cat-btn"
+onclick="filterProducts('بيتزا',this)">
+بيتزا
+</button>
+
+<button
+class="cat-btn"
+onclick="filterProducts('مشروبات',this)">
+مشروبات
+</button>
 
 </div>
 
-<div class="products" id="productsContainer"></div>
+<!-- Products -->
 
-<a href="cart.html" class="cart-float">
+<div
+class="products"
+id="productsContainer">
+</div>
+
+<!-- Floating Cart -->
+
+<a
+href="cart.html"
+class="cart-floating">
+
 🛒
+
+<span
+id="cartCount2"
+class="cart-count">
+0
+</span>
+
 </a>
 
 <script>
 
 const container =
-document.getElementById("productsContainer");
+document.getElementById(
+"productsContainer"
+);
 
-products.forEach(product=>{
+function renderProducts(list){
+
+container.innerHTML = "";
+
+list.forEach(product=>{
 
 container.innerHTML += `
 
-<div class="card">
+<div class="product-card">
 
-<img src="${product.image}">
+<img
+src="${product.image}"
+class="product-image">
 
-<div class="card-body">
+<div class="product-content">
 
-<div class="category">
+<div class="product-category">
 ${product.category}
 </div>
 
-<h3>${product.name}</h3>
+<div class="product-name">
+${product.name}
+</div>
 
-<div class="price">
+<div class="product-price">
 ${product.price} ريال
 </div>
 
@@ -103,13 +184,46 @@ onclick="addToCart(${product.id})">
 
 });
 
+}
+
+renderProducts(products);
+
+function filterProducts(category,btn){
+
+document
+.querySelectorAll(".cat-btn")
+.forEach(x=>x.classList.remove("active"));
+
+btn.classList.add("active");
+
+if(category==="all"){
+
+renderProducts(products);
+
+return;
+
+}
+
+let filtered =
+products.filter(
+p=>p.category===category
+);
+
+renderProducts(filtered);
+
+}
+
 function addToCart(id){
 
 let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
 
 let item =
-cart.find(p=>p.id===id);
+cart.find(
+x=>x.id===id
+);
 
 if(item){
 
@@ -118,7 +232,9 @@ item.qty++;
 }else{
 
 let product =
-products.find(p=>p.id===id);
+products.find(
+x=>x.id===id
+);
 
 cart.push({
 ...product,
@@ -132,12 +248,38 @@ localStorage.setItem(
 JSON.stringify(cart)
 );
 
+updateCartCounter();
+
 alert("تمت إضافة المنتج للسلة");
 
 }
 
+function updateCartCounter(){
+
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+
+let total = 0;
+
+cart.forEach(item=>{
+total += item.qty;
+});
+
+document
+.getElementById("cartCount")
+.innerText = total;
+
+document
+.getElementById("cartCount2")
+.innerText = total;
+
+}
+
+updateCartCounter();
+
 </script>
 
 </body>
-
 </html>
