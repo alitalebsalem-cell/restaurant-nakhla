@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -33,7 +34,7 @@ box-shadow:0 3px 12px rgba(0,0,0,.08);
 
 .cart-item img{
 width:100%;
-max-height:180px;
+max-height:220px;
 object-fit:cover;
 border-radius:15px;
 margin-bottom:10px;
@@ -146,7 +147,7 @@ placeholder="اسم العميل">
 <button
 class="order-btn"
 onclick="sendWhatsApp()">
-إرسال الطلب عبر واتساب
+إرسال الطلب
 </button>
 
 </div>
@@ -162,9 +163,8 @@ class="back-btn">
 <script>
 
 let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
+JSON.parse(localStorage.getItem("cart"))
+|| [];
 
 function renderCart(){
 
@@ -216,15 +216,13 @@ onclick="increaseQty(${index})">
 
 });
 
-document
-.getElementById("cartContainer")
-.innerHTML = html;
-if(isNaN(total)){
-total = 0;
-}
-document
-.getElementById("totalPrice")
-.innerText =
+document.getElementById(
+"cartContainer"
+).innerHTML = html;
+
+document.getElementById(
+"totalPrice"
+).innerText =
 total + " ريال";
 
 localStorage.setItem(
@@ -266,7 +264,6 @@ document.getElementById(
 if(name===""){
 
 alert("اكتب اسم العميل");
-
 return;
 
 }
@@ -281,47 +278,10 @@ window.location.href =
 
 }
 
-const data = {
+renderCart();
 
-customer:name,
-orders:orderText,
-total:total,
-phone:"+967730244894"
+</script>
 
-};
-
-try{
-
-await fetch(
-"https://script.google.com/macros/s/AKfycbxboKf6vqFvM7DALgDGGDnea7TY_9_tlMBAVtqLrzjBSmepBivvOqMohquzJfK4xhFokA/exec",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify(data)
-}
-);
-
-}catch(error){
-
-console.log(error);
-
-}
-
-let message =
-`طلب جديد من مطاعم النخلة
-
-اسم العميل: ${name}
-
-${orderText}
-
-الإجمالي: ${total} ريال`;
-
-window.open(
-`https://wa.me/967730244894?text=${encodeURIComponent(message)}`,
-"_blank"
-);
-
-}
-</script> </body> </html>
+</body>
+</html>
+```
