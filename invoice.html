@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>فاتورة الطلب</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+.invoice-page{
+padding:20px;
+max-width:900px;
+margin:auto;
+}
+
+.invoice-card{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.logo{
+width:120px;
+height:120px;
+object-fit:contain;
+display:block;
+margin:auto;
+margin-bottom:15px;
+}
+
+.restaurant-name{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#8A705D;
+margin-bottom:15px;
+}
+
+.invoice-info{
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+margin-bottom:25px;
+gap:10px;
+}
+
+.info-box{
+background:#f7f4f1;
+padding:12px 18px;
+border-radius:12px;
+font-weight:bold;
+}
+
+.customer-box{
+margin-bottom:20px;
+font-size:20px;
+font-weight:bold;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th{
+background:#8A705D;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:center;
+}
+
+.total-box{
+margin-top:25px;
+background:#f7f4f1;
+padding:20px;
+border-radius:15px;
+font-size:24px;
+font-weight:bold;
+text-align:center;
+}
+
+.actions{
+margin-top:25px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.btn{
+flex:1;
+padding:16px;
+border:none;
+border-radius:14px;
+cursor:pointer;
+font-size:18px;
+font-weight:bold;
+}
+
+.print-btn{
+background:#8A705D;
+color:white;
+}
+
+.whatsapp-btn{
+background:#25D366;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="invoice-page">
+
+<div class="invoice-card">
+
+<img
+src="images/logo.png"
+class="logo">
+
+<div class="restaurant-name">
+مطاعم ومطابخ النخلة
+</div>
+
+<div class="invoice-info">
+
+<div class="info-box">
+رقم الفاتورة:
+<span id="invoiceNumber"></span>
+</div>
+
+<div class="info-box">
+التاريخ:
+<span id="invoiceDate"></span>
+</div>
+
+</div>
+
+<div class="customer-box">
+
+اسم العميل:
+<span id="customerName"></span>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>الصنف</th>
+<th>الكمية</th>
+<th>السعر</th>
+<th>الإجمالي</th>
+</tr>
+
+</thead>
+
+<tbody id="invoiceItems">
+
+</tbody>
+
+</table>
+
+<div
+class="total-box"
+id="invoiceTotal">
+</div>
+
+<div class="actions">
+
+<button
+class="btn print-btn"
+onclick="window.print()">
+🖨 طباعة الفاتورة
+</button>
+
+<button
+class="btn whatsapp-btn"
+onclick="sendInvoiceWhatsApp()">
+📱 إرسال عبر واتساب
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="js/invoice.js"></script>
+
+</body>
+
+</html>
