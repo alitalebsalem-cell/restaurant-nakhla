@@ -1,76 +1,51 @@
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbxboKf6vqFvM7DALgDGGDnea7TY_9_tlMBAVtqLrzjBSmepBivvOqMohquzJfK4xhFokA/exec";
-
 let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
+JSON.parse(localStorage.getItem("cart"))
+|| [];
 
-function saveCart() {
-localStorage.setItem("cart", JSON.stringify(cart));
-renderCart();
-}
-
-function renderCart() {
+function renderCart(){
 
 const container =
-document.getElementById("cartItems");
+document.getElementById("cartContainer");
 
 if(!container) return;
 
-container.innerHTML = "";
-
-if(cart.length === 0){
-
-container.innerHTML = `
-<p style="text-align:center">
-السلة فارغة
-</p>
-`;
-
-document.getElementById("totalPrice").innerText = "0";
-return;
-}
-
+let html = "";
 let total = 0;
 
-cart.forEach(item=>{
+cart.forEach((item,index)=>{
 
 total += item.price * item.qty;
 
-container.innerHTML += `
+html += `
 
-<div class="cart-card">
+<div class="cart-item">
 
-<img
-src="${item.image}"
-style="
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:20px;
-">
+<img src="${item.image}">
 
-<h3>${item.name}</h3>
+<div class="item-name">
+${item.name}
+</div>
 
-<p>${item.price} ريال</p>
+<div class="item-price">
+${item.price} ريال
+</div>
 
-<div
-style="
-display:flex;
-justify-content:center;
-gap:15px;
-align-items:center;
-">
+<div class="qty-box">
 
 <button
-onclick="increaseQty(${item.id})">
-+
+class="qty-btn"
+onclick="decreaseQty(${index})">
+-
 </button>
 
-<span>${item.qty}</span>
+<span>
+${item.qty}
+</span>
 
 <button
-onclick="decreaseQty(${item.id})">
--
+class="qty-btn"
+onclick="increaseQty(${index})">
++
 </button>
 
 </div>
@@ -78,122 +53,67 @@ onclick="decreaseQty(${item.id})">
 </div>
 
 `;
+
 });
 
-document.getElementById("totalPrice")
-.innerText = total;
+container.innerHTML = html;
+
+document.getElementById(
+"totalPrice"
+).innerText =
+total + " ريال";
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
 
 }
 
-function increaseQty(id){
+function increaseQty(index){
 
-const item =
-cart.find(i=>i.id===id);
+cart[index].qty++;
 
-if(item){
-item.qty++;
-saveCart();
-}
+renderCart();
 
 }
 
-function decreaseQty(id){
+function decreaseQty(index){
 
-const item =
-cart.find(i=>i.id===id);
+cart[index].qty--;
 
-if(!item) return;
+if(cart[index].qty <= 0){
 
-item.qty--;
-
-if(item.qty <= 0){
-
-cart =
-cart.filter(i=>i.id!==id);
+cart.splice(index,1);
 
 }
 
-saveCart();
+renderCart();
 
 }
 
-async function sendOrder(){
+function sendWhatsApp(){
 
-const customerName =
-document.getElementById("customerName").value;
+let name =
+document.getElementById(
+"customerName"
+).value;
 
-if(!customerName){
+if(name===""){
 
 alert("اكتب اسم العميل");
+
 return;
 
 }
 
-let orderText = "";
-
-cart.forEach(item=>{
-
-orderText +=
-`${item.name} × ${item.qty}\n`;
-
-});
-
-const total =
-cart.reduce(
-(sum,item)=>
-sum+(item.price*item.qty),
-0
+localStorage.setItem(
+"customerName",
+name
 );
 
-const data = {
-
-customer: customerName,
-orders: orderText,
-total: total,
-phone: "+967730244894"
-
-};
-
-try{
-
-await fetch(
-WEB_APP_URL,
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/json"
-},
-body:
-JSON.stringify(data)
-}
-);
-
-}catch(error){
-
-console.log(error);
-
-}
-
-const message =
-
-`طلب جديد من مطاعم النخلة
-
-اسم العميل:
-${customerName}
-
-${orderText}
-
-الإجمالي:
-${total} ريال`;
-
-window.open(
-
-`https://wa.me/967730244894?text=${encodeURIComponent(message)}`,
-
-"_blank"
-
-);
+window.location.href =
+"invoice.html";
 
 }
 
