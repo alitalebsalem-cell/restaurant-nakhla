@@ -4,12 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>مطاعم ومطابخ النخلة</title>
 
 <link rel="stylesheet" href="css/style.css">
-
-<script src="js/products.js"></script>
 </head>
 
 <body>
@@ -18,266 +15,216 @@
 
 <header class="header">
 
-<button class="icon-btn">
-☰
-</button>
+<button class="icon-btn" onclick="toggleMenu()">☰</button>
 
 <div class="header-center">
-<div class="header-title">
-مطاعم ومطابخ النخلة
+<div class="header-title">مطاعم ومطابخ النخلة</div>
+<div class="header-sub">أشهى المأكولات اليمنية</div>
 </div>
 
-<div class="header-sub">
-أشهى المأكولات اليمنية
-</div>
-</div>
-
-<a href="cart.html" style="text-decoration:none;position:relative">
-
-<span style="font-size:30px">🛒</span>
-
-<span id="cartCount" class="cart-count">
-0
-</span>
-
+<a href="cart.html" style="text-decoration:none">
+<button class="icon-btn">
+🛒
+<span id="cartCount">0</span>
+</button>
 </a>
 
 </header>
+
+<!-- Sidebar -->
+
+<div id="sideMenu" style="
+position:fixed;
+top:0;
+right:-300px;
+width:280px;
+height:100%;
+background:white;
+box-shadow:-5px 0 20px rgba(0,0,0,.2);
+z-index:9999;
+padding:20px;
+transition:.3s;
+">
+
+<h2 style="color:#8B735D;margin-bottom:20px">
+مطاعم النخلة
+</h2>
+
+<a href="#products" style="display:block;margin:15px 0">
+قائمة الطعام
+</a>
+
+<a href="cart.html" style="display:block;margin:15px 0">
+سلة المشتريات
+</a>
+
+<a href="https://wa.me/967730244894"
+style="display:block;margin:15px 0">
+واتساب
+</a>
+
+<button onclick="toggleMenu()"
+style="
+margin-top:20px;
+padding:10px 20px;
+background:#8B735D;
+color:white;
+border:none;
+border-radius:10px;
+">
+إغلاق
+</button>
+
+</div>
 
 <!-- Hero -->
 
 <section class="hero">
 
-<img
-src="images/logo.png"
-class="hero-logo"
->
+<img src="images/Logo.png"
+class="hero-logo">
 
-<div class="hero-title">
+<h1 class="hero-title">
 مرحباً بكم
-</div>
+</h1>
 
-<div class="hero-desc">
+<p class="hero-desc">
 اطلب وجبتك المفضلة بسهولة
-</div>
-
-</section>
+</p>
 
 <a
 class="whatsapp"
-href="https://wa.me/967730244894"
-target="_blank">
+href="https://wa.me/967730244894">
 📱 اطلب عبر واتساب
 </a>
+
+</section>
+
+<!-- Search -->
+
+<div class="search-box">
+
+<input
+type="text"
+class="search-input"
+id="searchInput"
+placeholder="ابحث عن صنف..."
+onkeyup="searchProducts()">
+
+</div>
 
 <!-- Categories -->
 
 <div class="categories">
 
-<button
-class="cat-btn active"
-onclick="filterProducts('all',this)">
+<button class="cat-btn active"
+onclick="filterCategory('all')">
 الكل
 </button>
 
-<button
-class="cat-btn"
-onclick="filterProducts('وجبات رئيسية',this)">
+<button class="cat-btn"
+onclick="filterCategory('وجبات رئيسية')">
 وجبات رئيسية
 </button>
 
-<button
-class="cat-btn"
-onclick="filterProducts('مشويات',this)">
-مشويات
-</button>
-
-<button
-class="cat-btn"
-onclick="filterProducts('مقبلات',this)">
+<button class="cat-btn"
+onclick="filterCategory('مقبلات')">
 مقبلات
 </button>
 
-<button
-class="cat-btn"
-onclick="filterProducts('بيتزا',this)">
-بيتزا
+<button class="cat-btn"
+onclick="filterCategory('مشويات')">
+مشويات
 </button>
 
-<button
-class="cat-btn"
-onclick="filterProducts('مشروبات',this)">
+<button class="cat-btn"
+onclick="filterCategory('مشروبات')">
 مشروبات
+</button>
+
+<button class="cat-btn"
+onclick="filterCategory('بيتزا')">
+بيتزا
 </button>
 
 </div>
 
 <!-- Products -->
 
-<div
-class="products"
-id="productsContainer">
+<div id="products" class="products">
+
 </div>
 
-<!-- Floating Cart -->
-
-<a
-href="cart.html"
-class="cart-floating">
-
-🛒
-
-<span
-id="cartCount2"
-class="cart-count">
-0
-</span>
-
-</a>
+<script src="js/script.js"></script>
 
 <script>
 
-const container =
-document.getElementById(
-"productsContainer"
-);
+function toggleMenu(){
 
-function renderProducts(list){
+let menu=document.getElementById("sideMenu");
 
-container.innerHTML = "";
+if(menu.style.right=="0px"){
+menu.style.right="-300px";
+}else{
+menu.style.right="0";
+}
 
-list.forEach(product=>{
+}
 
-container.innerHTML += `
+function searchProducts(){
 
-<div class="product-card">
+let search=document
+.getElementById("searchInput")
+.value.toLowerCase();
 
-<img
-src="${product.image}"
-class="product-image">
+let cards=document
+.querySelectorAll(".product-card");
 
-<div class="product-content">
+cards.forEach(card=>{
 
-<div class="product-category">
-${product.category}
-</div>
+let name=card
+.querySelector(".product-name")
+.innerText
+.toLowerCase();
 
-<div class="product-name">
-${product.name}
-</div>
-
-<div class="product-price">
-${product.price} ريال
-</div>
-
-<button
-class="add-btn"
-onclick="addToCart(${product.id})">
-إضافة للسلة
-</button>
-
-</div>
-
-</div>
-
-`;
+if(name.includes(search)){
+card.style.display="block";
+}else{
+card.style.display="none";
+}
 
 });
 
 }
 
-renderProducts(products);
+function filterCategory(category){
 
-function filterProducts(category,btn){
+let cards=document
+.querySelectorAll(".product-card");
 
-document
-.querySelectorAll(".cat-btn")
-.forEach(x=>x.classList.remove("active"));
+cards.forEach(card=>{
 
-btn.classList.add("active");
+if(category=="all"){
 
-if(category==="all"){
-
-renderProducts(products);
-
-return;
-
-}
-
-let filtered =
-products.filter(
-p=>p.category===category
-);
-
-renderProducts(filtered);
-
-}
-
-function addToCart(id){
-
-let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
-
-let item =
-cart.find(
-x=>x.id===id
-);
-
-if(item){
-
-item.qty++;
+card.style.display="block";
 
 }else{
 
-let product =
-products.find(
-x=>x.id===id
-);
+if(card.dataset.category==category){
 
-cart.push({
-...product,
-qty:1
+card.style.display="block";
+
+}else{
+
+card.style.display="none";
+
+}
+
+}
+
 });
 
 }
-
-localStorage.setItem(
-"cart",
-JSON.stringify(cart)
-);
-
-updateCartCounter();
-
-alert("تمت إضافة المنتج للسلة");
-
-}
-
-function updateCartCounter(){
-
-let cart =
-JSON.parse(
-localStorage.getItem("cart")
-) || [];
-
-let total = 0;
-
-cart.forEach(item=>{
-total += item.qty;
-});
-
-document
-.getElementById("cartCount")
-.innerText = total;
-
-document
-.getElementById("cartCount2")
-.innerText = total;
-
-}
-
-updateCartCounter();
 
 </script>
 
