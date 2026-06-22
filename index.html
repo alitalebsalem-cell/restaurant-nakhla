@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>مطعم النخلة</title>
+<title>مطاعم ومطابخ النخلة</title>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -15,17 +15,47 @@
 <body>
 
 <header>
-🌴 مطعم النخلة
-</header>
 
-<a class="whatsapp-btn"
-href="https://wa.me/967730244894"
-target="_blank">
-تواصل عبر واتساب
+<button class="menu-btn">☰</button>
+
+<div class="brand">
+<h1>مطاعم ومطابخ النخلة</h1>
+<p>أشهى المأكولات اليمنية</p>
+</div>
+
+<a href="cart.html" class="cart-btn">
+🛒
 </a>
 
-<div class="section-title">
-قائمة الطعام
+</header>
+
+<section class="hero">
+
+<img src="images/logo.png" class="hero-logo">
+
+<h2>مرحباً بكم في مطاعم النخلة</h2>
+
+<p>
+اطلب وجبتك المفضلة بسهولة
+</p>
+
+</section>
+
+<a
+class="whatsapp-btn"
+href="https://wa.me/967730244894"
+target="_blank">
+📱 اطلب عبر واتساب
+</a>
+
+<div class="categories">
+
+<button>🍽️ وجبات رئيسية</button>
+<button>🔥 مشويات</button>
+<button>🥗 مقبلات</button>
+<button>🍕 بيتزا</button>
+<button>🥤 مشروبات</button>
+
 </div>
 
 <div class="products" id="productsContainer"></div>
@@ -39,7 +69,7 @@ target="_blank">
 const container =
 document.getElementById("productsContainer");
 
-products.forEach(product => {
+products.forEach(product=>{
 
 container.innerHTML += `
 
@@ -59,7 +89,8 @@ ${product.category}
 ${product.price} ريال
 </div>
 
-<button class="add-btn"
+<button
+class="add-btn"
 onclick="addToCart(${product.id})">
 إضافة للسلة
 </button>
@@ -78,7 +109,7 @@ let cart =
 JSON.parse(localStorage.getItem("cart")) || [];
 
 let item =
-cart.find(p => p.id === id);
+cart.find(p=>p.id===id);
 
 if(item){
 
@@ -87,7 +118,7 @@ item.qty++;
 }else{
 
 let product =
-products.find(p => p.id === id);
+products.find(p=>p.id===id);
 
 cart.push({
 ...product,
