@@ -254,7 +254,7 @@ renderCart();
 
 }
 
-function sendWhatsApp(){
+async function sendWhatsApp(){
 
 let name =
 document.getElementById(
@@ -264,48 +264,66 @@ document.getElementById(
 if(name===""){
 
 alert("اكتب اسم العميل");
-
 return;
 
 }
 
-let message =
-"طلب جديد من مطاعم النخلة%0A%0A";
-
-message +=
-"اسم العميل: "
-+ name
-+ "%0A%0A";
-
+let orderText = "";
 let total = 0;
 
 cart.forEach(item=>{
 
 total += item.price * item.qty;
 
-message +=
-item.name
-+ " × "
-+ item.qty
-+ "%0A";
+orderText +=
+item.name +
+" × " +
+item.qty +
+"\n";
 
 });
 
-message +=
-"%0Aالإجمالي: "
-+ total
-+ " ريال";
+const data = {
 
-window.open(
-"https://wa.me/967730244894?text="
-+ message
+customer:name,
+orders:orderText,
+total:total,
+phone:"+967730244894"
+
+};
+
+try{
+
+await fetch(
+"https://script.google.com/macros/s/AKfycbxboKf6vqFvM7DALgDGGDnea7TY_9_tlMBAVtqLrzjBSmepBivvOqMohquzJfK4xhFokA/exec",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+}
 );
+
+}catch(error){
+
+console.log(error);
 
 }
 
-renderCart();
+let message =
+`طلب جديد من مطاعم النخلة
 
-</script>
+اسم العميل: ${name}
 
-</body>
-</html>
+${orderText}
+
+الإجمالي: ${total} ريال`;
+
+window.open(
+`https://wa.me/967730244894?text=${encodeURIComponent(message)}`,
+"_blank"
+);
+
+}
+</script> </body> </html>
