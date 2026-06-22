@@ -1,1 +1,311 @@
-ttest
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>سلة المشتريات</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+.cart-page{
+padding:20px;
+}
+
+.cart-title{
+font-size:32px;
+font-weight:bold;
+color:#7B6656;
+margin-bottom:25px;
+text-align:center;
+}
+
+.cart-item{
+background:white;
+border-radius:20px;
+padding:15px;
+margin-bottom:15px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.cart-item img{
+width:100%;
+max-height:180px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.item-name{
+font-size:24px;
+font-weight:bold;
+}
+
+.item-price{
+color:#7B6656;
+font-size:22px;
+margin:10px 0;
+}
+
+.qty-box{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px;
+margin-top:15px;
+}
+
+.qty-btn{
+width:45px;
+height:45px;
+border:none;
+border-radius:50%;
+background:#7B6656;
+color:white;
+font-size:24px;
+cursor:pointer;
+}
+
+.total-box{
+background:white;
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.total-line{
+display:flex;
+justify-content:space-between;
+font-size:24px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.customer-name{
+width:100%;
+padding:15px;
+font-size:18px;
+border-radius:12px;
+border:1px solid #ccc;
+margin-top:20px;
+}
+
+.order-btn{
+width:100%;
+margin-top:20px;
+padding:18px;
+background:#7B6656;
+color:white;
+border:none;
+border-radius:15px;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.back-btn{
+display:block;
+text-align:center;
+margin-top:15px;
+text-decoration:none;
+color:#7B6656;
+font-size:18px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="cart-page">
+
+<div class="cart-title">
+🛒 سلة المشتريات
+</div>
+
+<div id="cartContainer"></div>
+
+<div class="total-box">
+
+<div class="total-line">
+<span>الإجمالي</span>
+<span id="totalPrice">0 ريال</span>
+</div>
+
+<input
+id="customerName"
+class="customer-name"
+placeholder="اسم العميل">
+
+<button
+class="order-btn"
+onclick="sendWhatsApp()">
+إرسال الطلب عبر واتساب
+</button>
+
+</div>
+
+<a
+href="index.html"
+class="back-btn">
+⬅ العودة للقائمة
+</a>
+
+</div>
+
+<script>
+
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+
+function renderCart(){
+
+let html = "";
+
+let total = 0;
+
+cart.forEach((item,index)=>{
+
+total += item.price * item.qty;
+
+html += `
+
+<div class="cart-item">
+
+<img src="${item.image}">
+
+<div class="item-name">
+${item.name}
+</div>
+
+<div class="item-price">
+${item.price} ريال
+</div>
+
+<div class="qty-box">
+
+<button
+class="qty-btn"
+onclick="decreaseQty(${index})">
+-
+</button>
+
+<span>
+${item.qty}
+</span>
+
+<button
+class="qty-btn"
+onclick="increaseQty(${index})">
++
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById("cartContainer")
+.innerHTML = html;
+
+document
+.getElementById("totalPrice")
+.innerText =
+total + " ريال";
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+}
+
+function increaseQty(index){
+
+cart[index].qty++;
+
+renderCart();
+
+}
+
+function decreaseQty(index){
+
+cart[index].qty--;
+
+if(cart[index].qty <= 0){
+
+cart.splice(index,1);
+
+}
+
+renderCart();
+
+}
+
+function sendWhatsApp(){
+
+let name =
+document.getElementById(
+"customerName"
+).value;
+
+if(name===""){
+
+alert("اكتب اسم العميل");
+
+return;
+
+}
+
+let message =
+"طلب جديد من مطاعم النخلة%0A%0A";
+
+message +=
+"اسم العميل: "
++ name
++ "%0A%0A";
+
+let total = 0;
+
+cart.forEach(item=>{
+
+total += item.price * item.qty;
+
+message +=
+item.name
++ " × "
++ item.qty
++ "%0A";
+
+});
+
+message +=
+"%0Aالإجمالي: "
++ total
++ " ريال";
+
+window.open(
+"https://wa.me/967730244894?text="
++ message
+);
+
+}
+
+renderCart();
+
+</script>
+
+</body>
+</html>
