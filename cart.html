@@ -219,7 +219,9 @@ onclick="increaseQty(${index})">
 document
 .getElementById("cartContainer")
 .innerHTML = html;
-
+if(isNaN(total)){
+total = 0;
+}
 document
 .getElementById("totalPrice")
 .innerText =
